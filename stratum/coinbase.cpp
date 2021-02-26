@@ -337,7 +337,7 @@ void coinbase_create(YAAMP_COIND *coind, YAAMP_JOB_TEMPLATE *templ, json_value *
 	bool founder_enabled = json_get_bool(json_result, "founder_payments_started");
 	json_value* founder = json_get_object(json_result, "founder");
 
-	if (!coind->hasmasternodes && founder_enabled && founder) {
+	if (coind->hasmasternodes && founder_enabled && founder) {
 		char founder_payee[256] = { 0 };
 		char founder_script[1024] = { 0};
 		const char *payee = json_get_string(founder, "payee");
