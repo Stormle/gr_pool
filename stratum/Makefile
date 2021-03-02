@@ -11,7 +11,7 @@ CFLAGS += -DNO_EXCHANGE
 #CFLAGS=-c -O2 -I /usr/include/mysql
 LDFLAGS=-O2 `mysql_config --libs`
 
-LDLIBS=iniparser/libiniparser.a algos/libalgos.a sha3/libhash.a -lpthread -lgmp -lm -lstdc++
+LDLIBS=iniparser/libiniparser.a algos/libalgos.a sha3/libhash.a -lpthread -lgmp -lm -lstdc++  
 LDLIBS+=-lmysqlclient
 
 SOURCES=stratum.cpp db.cpp coind.cpp coind_aux.cpp coind_template.cpp coind_submit.cpp util.cpp list.cpp \
@@ -29,16 +29,20 @@ OUTPUT=stratum
 
 CODEDIR1=algos
 CODEDIR2=sha3
+CODEDIR3=iniparser
 
-.PHONY: projectcode1 projectcode2
+.PHONY: projectcode1 projectcode2 projectcode3 
 
-all: projectcode1 projectcode2 $(SOURCES) $(OUTPUT)
+all: projectcode1 projectcode2 projectcode3 $(SOURCES) $(OUTPUT)
 
 projectcode1:
 	$(MAKE) -C $(CODEDIR1)
 
 projectcode2:
 	$(MAKE) -C $(CODEDIR2)
+
+projectcode3:
+	$(MAKE) -C $(CODEDIR3)
 
 $(SOURCES): stratum.h util.h
 
@@ -53,11 +57,16 @@ $(OUTPUT): $(OBJECTS)
 
 clean:
 	rm -f *.o
+	rm -f iniparser/*.a
+	rm -f iniparser/*.o
 	rm -f algos/*.o
 	rm -f algos/*.a
 	rm -f sha3/*.o
 	rm -f sha3/*.a
-	rm -f algos/ar2/*.o
+	rm -f algos/ar2/*.o 
+	rm -f algos/blake2/*.o
+	rm -f algos/cryptonote/*.o
+	rm -f algos/SWIFFTX/*.o
 
 install: clean all
 	strip -s stratum
